@@ -24,7 +24,7 @@ export default function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <a href="#">
+        <a href="/">
           <span className="text-base font-semibold">Utly</span>
         </a>
       </SidebarHeader>

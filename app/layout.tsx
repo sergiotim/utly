@@ -10,11 +10,11 @@ export default function Layout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="overflow-x-hidden">
         <SidebarProvider>
           <AppSidebar></AppSidebar>
 
-          <main>
+          <main className="h-screen w-screen flex">
             <SidebarTrigger></SidebarTrigger>
             {children}
           </main>
