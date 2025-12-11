@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Download, UploadCloud, Check, Trash2, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { InputGroup } from '@/components/ui/InputGroup';
-// import SeeAlso from '@/components/ui/SeeAlso'; // Vamos criar esse componente no final
+import SeeAlso from '@/components/ui/SeeAlso'; // Vamos criar esse componente no final
 
 export default function QrCodePage() {
   const [qrValue, setQrValue] = useState('https://utly.com');
@@ -95,7 +95,7 @@ export default function QrCodePage() {
            </div>
         </div>
       </div>
-      {/* <SeeAlso current="qrcode" /> */}
+      <SeeAlso current="qrcode" />
     </div>
   );
 }

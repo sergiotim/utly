@@ -30,9 +30,6 @@ export default function SeeAlso({ current }: { current: string }) {
           ))}
         </div>
       </div>
-      <div className="mt-10">
-         <AdSlot label="Horizontal Banner (728x90)" className="h-24 w-full" />
-      </div>
     </div>
   );
 }
