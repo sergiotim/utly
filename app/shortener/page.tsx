@@ -24,11 +24,11 @@ export default function ShortenerPage() {
   const [recentLinks, setRecentLinks] = useState<
     { slug: string; originalUrl: string }[]
   >([]);
-  const [domain,setDomain] = useState<string>("utly.com")
+  const [domain, setDomain] = useState<string>("utly.com");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setDomain(window.location.host)
+      setDomain(window.location.host);
       const saved = localStorage.getItem("utly_recent_links");
       if (saved) {
         try {
@@ -38,7 +38,7 @@ export default function ShortenerPage() {
         }
       }
     }
-  },[]);
+  }, []);
 
   async function handleSubmit(formData: FormData) {
     setResult(null);
@@ -47,18 +47,18 @@ export default function ShortenerPage() {
       const response = await createShortLink(formData);
       setResult(response);
 
-      if (response.success && response.slug){
-        const originalUrl = formData.get("url") as string
+      if (response.success && response.slug) {
+        const originalUrl = formData.get("url") as string;
 
         const newLink = {
-          slug:response.slug,
-          originalUrl: originalUrl
-        }
+          slug: response.slug,
+          originalUrl: originalUrl,
+        };
 
-        const updatedList = [newLink,...recentLinks]
+        const updatedList = [newLink, ...recentLinks].slice(0, 5);
 
-        setRecentLinks(updatedList)
-        localStorage.setItem("utly_recent_links",JSON.stringify(updatedList))
+        setRecentLinks(updatedList);
+        localStorage.setItem("utly_recent_links", JSON.stringify(updatedList));
       }
     });
   }
@@ -141,8 +141,7 @@ export default function ShortenerPage() {
             <div className="flex items-center gap-2 bg-white p-2 rounded border border-green-200">
               <span className="flex-1 text-slate-600 font-mono text-sm truncate pl-2">
                 {/* Mostra a URL completa. window.location.host pega 'localhost:3000' ou 'utly.com' */}
-                {domain}
-                /{result.slug}
+                {domain}/{result.slug}
               </span>
               <button
                 onClick={copyToClipboard}
@@ -167,25 +166,37 @@ export default function ShortenerPage() {
         </h4>
         <div className="space-y-3">
           {recentLinks.length === 0 ? (
-
-          <div className="text-center text-slate-400 text-sm italic py-4">
-            Seus links criados aparecerão aqui...
-          </div>
-          ):(recentLinks.map((link)=>(
-            <div key={link.slug} className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg hover:border-indigo-300 transition-colors group animate-in slide-in-from-top-2">
-              <div className="overflow-hidden mr-4">
-                <p className="text-indigo-600 font-bold text-sm truncate">
-                  {`${domain}/${link.slug}`}
-                </p>
-                <p className="text-xs text-slate-400 truncate max-w-[250px]">
-                  {link.originalUrl}
-                </p>
-              </div>
-              <Button onClick={()=>navigator.clipboard.writeText(`${window.location.origin}/${link.slug}`)} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors" title="Copiar">
-                <Copy className="w-4 h-4"></Copy>
-              </Button>
+            <div className="text-center text-slate-400 text-sm italic py-4">
+              Seus links criados aparecerão aqui...
             </div>
-          )))}
+          ) : (
+            recentLinks.map((link) => (
+              <div
+                key={link.slug}
+                className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg hover:border-indigo-300 transition-colors group animate-in slide-in-from-top-2"
+              >
+                <div className="overflow-hidden mr-4">
+                  <p className="text-indigo-600 font-bold text-sm truncate">
+                    {`${domain}/${link.slug}`}
+                  </p>
+                  <p className="text-xs text-slate-400 truncate max-w-[250px]">
+                    {link.originalUrl}
+                  </p>
+                </div>
+                <Button
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      `${window.location.origin}/${link.slug}`
+                    )
+                  }
+                  className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
+                  title="Copiar"
+                >
+                  <Copy className="w-4 h-4"></Copy>
+                </Button>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
