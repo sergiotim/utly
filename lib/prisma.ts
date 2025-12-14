@@ -1,4 +1,4 @@
-import { neonConfig, Pool } from "@neondatabase/serverless";
+import { neonConfig} from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
