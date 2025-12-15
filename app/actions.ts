@@ -4,43 +4,63 @@ import { prisma } from "@/lib/prisma";
 import { nanoid } from "nanoid";
 import z from "zod";
 
-async function detectProtocol(domain: string) {
-  if (/^https?:\/\//i.test(domain)) {
-    return domain;
-  }
-
-  const domainClean = domain.trim();
-
+async function checkUrl(url: string) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 1500);
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 1500);
-
-    await fetch(`https://${domainClean}`, {
+    await fetch(url, {
       method: "HEAD",
       signal: controller.signal,
       cache: "no-store",
     });
-
+    return true;
+  } catch {
+    return false;
+  } finally {
     clearTimeout(timeoutId);
-    return `https://${domainClean}`;
-  } catch (error) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1500);
-
-      await fetch(`http://${domainClean}`, {
-        method: "HEAD",
-        signal: controller.signal,
-        cache: "no-store",
-      });
-
-      clearTimeout(timeoutId);
-      console.log(`Site antigo detectado (HTTP): ${domainClean}`);
-      return `http://${domainClean}`;
-    } catch (e) {
-      return `https://${domainClean}`;
-    }
   }
+}
+
+async function detectProtocol(domain: string) {
+  const clean = domain.trim();
+
+  let tempUrlStr = `https://${clean}`;
+
+  if (/^https?:\/\//i.test(clean)) {
+    tempUrlStr = clean;
+  }
+
+  let hostname;
+
+  try {
+    hostname = new URL(tempUrlStr).hostname;
+  } catch {
+    return clean;
+  }
+
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    hostname.startsWith("192.168.") ||
+    hostname.startsWith("10.") ||
+    hostname.endsWith(".local")
+  ) {
+    return null;
+  }
+
+  if (/^https?:\/\//i.test(clean)) {
+    return clean;
+  }
+
+  if (await checkUrl(`https://${clean}`)) {
+    return `https://${clean}`;
+  }
+  if (await checkUrl(`http://${clean}`)) {
+    return `http://${clean}`;
+  }
+
+  return `https://${clean}`;
 }
 
 const slugSchema = z
@@ -55,8 +75,7 @@ const slugSchema = z
 
 const urlSchema = z.string().refine((val) => {
   try {
-    new URL(val);
-    return true;
+    return !!new URL(val);
   } catch {
     return false;
   }
@@ -67,21 +86,31 @@ export async function createShortLink(formData: FormData) {
   const rawSlug = formData.get("slug");
 
   if (!rawUrl) {
-    return { error: "A URL é obrigatória." };
+    return {
+      error: "A URL é obrigatória.",
+    };
   }
 
-  const finalUrl = await detectProtocol(rawUrl)
+  const finalUrl = await detectProtocol(rawUrl);
 
-  const urlValidation = urlSchema.safeParse(finalUrl)
-
-  if(!urlValidation.success){
-    return {error:urlValidation.error.issues[0].message}
+  if (!finalUrl) {
+    return {
+      error: "Esta URL não é permitida por motivos de segurança.",
+    };
   }
 
-  const slugValidation = slugSchema.safeParse(rawSlug === "" ? undefined : rawSlug)
+  const urlValidation = urlSchema.safeParse(finalUrl);
 
-  if(!slugValidation.success){
-    return {error: slugValidation.error.issues[0].message}
+  if (!urlValidation.success) {
+    return { error: "O site informado não parece ser válido." };
+  }
+
+  const slugValidation = slugSchema.safeParse(
+    rawSlug === "" ? undefined : rawSlug
+  );
+
+  if (!slugValidation.success) {
+    return { error: slugValidation.error.issues[0].message };
   }
 
   const finalSlug = slugValidation.data || nanoid(6);
