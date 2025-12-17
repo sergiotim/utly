@@ -1,12 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Download,
-  UploadCloud,
-  Check,
-  Trash2,
-  ExternalLink,
-} from "lucide-react";
+import { Download, UploadCloud, Check, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { InputGroup } from "@/components/ui/InputGroup";
 import SeeAlso from "@/components/ui/SeeAlso"; // Vamos criar esse componente no final
@@ -17,6 +11,11 @@ export default function QrCodePage() {
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [logo, setLogo] = useState<string | null>(null);
+  const [logoDimensions, setLogoDimensions] = useState({
+    width: 40,
+    height: 40,
+  });
+  const qrCodeRef = useRef<HTMLDivElement>(null);
 
   const logoInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,7 +23,33 @@ export default function QrCodePage() {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setLogo(reader.result as string);
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setLogo(result);
+
+        const img = new Image();
+        img.src = result;
+
+        img.onload = () => {
+          const maxDimension = 60;
+
+          const aspectRatio = img.width / img.height;
+          let newWidth, newHeight;
+
+          if (aspectRatio > 1) {
+            newWidth = maxDimension;
+            newHeight = maxDimension / aspectRatio;
+          } else {
+            newHeight = maxDimension;
+            newWidth = maxDimension * aspectRatio;
+          }
+
+          setLogoDimensions({
+            width: newWidth,
+            height: newHeight,
+          });
+        };
+      };
       reader.readAsDataURL(file);
     }
   };
@@ -34,6 +59,61 @@ export default function QrCodePage() {
     if (logoInputRef.current) logoInputRef.current.value = "";
   };
 
+  function downloadQRCode(format: "png" | "svg") {
+    if (!qrCodeRef.current) {
+      return;
+    }
+
+    const svgElement = qrCodeRef.current.querySelector("svg");
+    if (!svgElement) {
+      return;
+    }
+
+    if (format === "svg") {
+      const svgData = new XMLSerializer().serializeToString(svgElement);
+
+      const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "utly-qrcode.svg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else if (format === "png") {
+      const svgData = new XMLSerializer().serializeToString(svgElement);
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+
+      canvas.width = 1000;
+      canvas.height = 1000;
+
+      const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      img.src = url;
+
+      img.onload = () => {
+        if (ctx) {
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          const pngUrl = canvas.toDataURL("image/png");
+
+          const link = document.createElement("a");
+          link.href = pngUrl;
+          link.download = "utly-qrcode.png";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      };
+    }
+  }
 
   return (
     <div className="animate-in slide-in-from-bottom-4 duration-500 pb-32">
@@ -47,8 +127,6 @@ export default function QrCodePage() {
               Personalize cada detalhe do seu código.
             </p>
           </header>
-          {/* ... Copie o resto do conteúdo do QR Code (inputs) do seu código original aqui ... */}
-          {/* Vou abreviar os inputs para caber na resposta, mas você cola o código completo aqui */}
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
             <InputGroup label="Conteúdo / URL">
               <input
@@ -130,42 +208,41 @@ export default function QrCodePage() {
         <div className="lg:col-span-5">
           <div className="sticky top-24 space-y-4">
             <div className="bg-slate-900 p-8 rounded-2xl shadow-2xl flex flex-col items-center justify-center text-center relative overflow-hidden">
-              <div className="relative bg-white p-4 rounded-xl shadow-lg z-10">
-                <QRCodeSVG value={qrValue} fgColor={fgColor} bgColor={bgColor}></QRCodeSVG>
-                {/* <img
-                  src={qrApiUrl}
-                  alt="QR Code Preview"
-                  className="w-48 h-48 object-contain"
-                /> */}
-                {logo && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-white p-1 rounded-full shadow-md">
-                      <img
-                        src={logo}
-                        alt="Logo"
-                        className="w-10 h-10 object-contain rounded-full"
-                      />
-                    </div>
-                  </div>
-                )}
+              <div className="relative bg-white shadow-lg z-10">
+                <div ref={qrCodeRef}>
+                  <QRCodeSVG
+                    value={qrValue}
+                    fgColor={fgColor}
+                    bgColor={bgColor}
+                    level={logo ? "H" : "M"}
+                    marginSize={4}
+                    size={256}
+                    minVersion={4}
+                    imageSettings={
+                      logo
+                        ? {
+                            src: logo,
+                            width: logoDimensions.width,
+                            height: logoDimensions.height,
+                            excavate: true,
+                          }
+                        : undefined
+                    }
+                  ></QRCodeSVG>
+                </div>
               </div>
               <div className="mt-8 grid grid-cols-2 gap-3 w-full relative z-10">
                 <Button
                   variant="primary"
                   className="w-full"
-                  onClick={() =>
-                    window.open(
-                      qrApiUrl.replace("svg", "png") + "&download=1",
-                      "_blank"
-                    )
-                  }
+                  onClick={() => downloadQRCode("png")}
                 >
                   <Download className="w-4 h-4" /> PNG
                 </Button>
                 <Button
                   variant="secondary"
                   className="w-full bg-transparent  border-slate-700 hover:bg-slate-800 hover:text-white"
-                  onClick={() => window.open(qrApiUrl, "_blank")}
+                  onClick={() => downloadQRCode("svg")}
                 >
                   <Download className="w-4 h-4" /> SVG
                 </Button>
