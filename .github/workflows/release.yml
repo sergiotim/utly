@@ -1,0 +1,32 @@
+name: Release Automático
+on:
+  push:
+    branches:
+      - main # O gatilho que definimos
+
+permissions:
+  contents: write # Permissão para criar a tag e a release
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Criar Versão
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar Código
+        uses: actions/checkout@v4
+      
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          
+      - name: Instalar Dependências
+        run: npm ci
+        
+      - name: Gerar Versão e Publicar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
