@@ -9,7 +9,7 @@ import SeeAlso from "@/components/ui/SeeAlso";
 import { QRCodeSVG } from "qrcode.react";
 
 export default function QrCodePage() {
-  const [qrValue, setQrValue] = useState(window.location.origin);
+  const [qrValue, setQrValue] = useState("");
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [logo, setLogo] = useState<string | null>(null);
