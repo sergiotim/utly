@@ -1,13 +1,15 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Download, UploadCloud, Check, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { InputGroup } from "@/components/ui/InputGroup";
-import SeeAlso from "@/components/ui/SeeAlso"; // Vamos criar esse componente no final
+import SeeAlso from "@/components/ui/SeeAlso"; 
+
+// lib de gerar qrcode no client
 import { QRCodeSVG } from "qrcode.react";
 
 export default function QrCodePage() {
-  const [qrValue, setQrValue] = useState("https://utly.com");
+  const [qrValue, setQrValue] = useState(window.location.origin);
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [logo, setLogo] = useState<string | null>(null);
@@ -31,7 +33,7 @@ export default function QrCodePage() {
         img.src = result;
 
         img.onload = () => {
-          const maxDimension = 60;
+          const maxDimension = 70;
 
           const aspectRatio = img.width / img.height;
           let newWidth, newHeight;
@@ -65,54 +67,53 @@ export default function QrCodePage() {
     }
 
     const svgElement = qrCodeRef.current.querySelector("svg");
+
     if (!svgElement) {
       return;
     }
 
-    if (format === "svg") {
-      const svgData = new XMLSerializer().serializeToString(svgElement);
+    const svgData = new XMLSerializer().serializeToString(svgElement);
+    const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+    const blobUrl = URL.createObjectURL(blob);
 
-      const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-
+    function triggerDownload(url: string, extension: "svg" | "png") {
       const link = document.createElement("a");
       link.href = url;
-      link.download = "utly-qrcode.svg";
+      link.download = `utly-qrcode.${extension}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } else if (format === "png") {
-      const svgData = new XMLSerializer().serializeToString(svgElement);
+    }
+
+    if (format === "svg") {
+      triggerDownload(blobUrl, "svg");
+      URL.revokeObjectURL(blobUrl);
+    } else {
       const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const img = new Image();
 
       canvas.width = 1000;
       canvas.height = 1000;
 
-      const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
 
-      img.src = url;
+      img.src = blobUrl;
 
       img.onload = () => {
         if (ctx) {
           ctx.fillStyle = "white";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          const pngUrl = canvas.toDataURL("image/png");
+          const pngUrl = canvas.toDataURL("image/png")
+          triggerDownload(pngUrl,"png")
 
-          const link = document.createElement("a");
-          link.href = pngUrl;
-          link.download = "utly-qrcode.png";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          URL.revokeObjectURL(blobUrl)
         }
       };
     }
+
+    
   }
 
   return (
