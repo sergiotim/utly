@@ -57,7 +57,7 @@ Siga os passos abaixo para iniciar o ambiente de desenvolvimento:
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/utly.git](https://github.com/seu-usuario/utly.git)
+    git clone [https://github.com/sergiotim/utly.git](https://github.com/sergiotim/utly.git)
     cd utly
     ```
 
