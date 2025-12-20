@@ -106,6 +106,7 @@ export default function QrCodePage() {
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
+          // Guarda imagem em um blob, para facilitar o download
           canvas.toBlob((blob) => {
             if (blob) {
               const pngUrl = URL.createObjectURL(blob);
