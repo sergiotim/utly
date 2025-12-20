@@ -3,7 +3,7 @@ import React, { useState, useRef } from "react";
 import { Download, UploadCloud, Check, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { InputGroup } from "@/components/ui/InputGroup";
-import SeeAlso from "@/components/ui/SeeAlso"; 
+import SeeAlso from "@/components/ui/SeeAlso";
 
 // lib de gerar qrcode no client
 import { QRCodeSVG } from "qrcode.react";
@@ -72,10 +72,12 @@ export default function QrCodePage() {
       return;
     }
 
+    // Serializa o SVG
     const svgData = new XMLSerializer().serializeToString(svgElement);
     const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
     const blobUrl = URL.createObjectURL(blob);
 
+    // função para cirar a imagem dentro do html e fazer o download
     function triggerDownload(url: string, extension: "svg" | "png") {
       const link = document.createElement("a");
       link.href = url;
@@ -89,6 +91,7 @@ export default function QrCodePage() {
       triggerDownload(blobUrl, "svg");
       URL.revokeObjectURL(blobUrl);
     } else {
+      // para baixar em png, precisa fazer um canvas adicionar um fundo que o usuário escolheu e adicionar a imagem do qrcode
       const canvas = document.createElement("canvas");
 
       canvas.width = 1000;
@@ -97,23 +100,26 @@ export default function QrCodePage() {
       const ctx = canvas.getContext("2d");
       const img = new Image();
 
-      img.src = blobUrl;
-
       img.onload = () => {
         if (ctx) {
-          ctx.fillStyle = "white";
+          ctx.fillStyle = bgColor;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          const pngUrl = canvas.toDataURL("image/png")
-          triggerDownload(pngUrl,"png")
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const pngUrl = URL.createObjectURL(blob);
+              triggerDownload(pngUrl, "png");
 
-          URL.revokeObjectURL(blobUrl)
+              URL.revokeObjectURL(pngUrl);
+              URL.revokeObjectURL(blobUrl);
+            }
+          }, "image/png");
         }
       };
-    }
 
-    
+      img.src = blobUrl
+    }
   }
 
   return (
