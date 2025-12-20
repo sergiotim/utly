@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { QrCode, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
-import { AdSlot } from './AdSlot';
 
 export default function SeeAlso({ current }: { current: string }) {
   const tools = [

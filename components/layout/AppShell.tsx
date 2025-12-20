@@ -8,19 +8,23 @@ import {
   Image as ImageIcon,
   Link as LinkIcon,
   Menu,
-  X,
-  Home,
 } from "lucide-react";
-import { AdSlot } from "@/components/ui/AdSlot";
+// Removemos o AdSlot antigo
+// import { AdSlot } from "@/components/ui/AdSlot"; 
+// Importamos o novo componente de Promoção Interna
+import InternalPromo from "@/components/ui/InternalPromo";
 import Image from "next/image";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pathname = usePathname(); // Substitui o activeRoute
-  const showStickyAd = pathname !== "/";
+  const pathname = usePathname(); 
 
   // Helper para verificar rota ativa
   const isActive = (path: string) => pathname === path;
+
+  // Lógica para saber qual ferramenta está ativa, para não mostrar propaganda dela mesma
+  // Ex: se pathname é "/remove-bg", o ID é "remove-bg"
+  const currentToolId = pathname ? pathname.replace('/', '') : '';
 
   return (
     <div className="min-h-screen bg-white flex font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900">
@@ -31,6 +35,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         }`}
       >
         <div className="flex flex-col h-full">
+          {/* LOGO */}
           <Link
             href="/"
             className="h-16 flex items-center px-6 border-b border-slate-200/50 hover:bg-slate-100/50 transition-colors"
@@ -41,8 +46,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 src="/logo.svg"
                 alt="Logo Utly"
                 fill
-                className="object-contain" // Garante que a logo não fique esticada
-                priority // Carrega a logo imediatamente (importante para o topo da página)
+                className="object-contain"
+                priority
               />
             </div>
             <span className="text-xl font-bold text-slate-900 tracking-tight">
@@ -50,6 +55,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
 
+          {/* MENU DE NAVEGAÇÃO */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 mt-2 px-2">
               Ferramentas
@@ -92,11 +98,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           </nav>
 
+          {/* AREA DE PROMOÇÃO (Substituindo o AdSlot) */}
           <div className="p-4 border-t border-slate-200">
-            <AdSlot
-              label="Sidebar Ad (250x250)"
-              className="h-48 w-full bg-white"
-            />
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 px-1">
+               Veja Também
+            </p>
+            {/* O componente InternalPromo decide o que mostrar baseado no ID atual */}
+            <InternalPromo currentToolId={currentToolId} />
           </div>
         </div>
       </aside>
@@ -119,37 +127,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             >
               <Menu className="w-5 h-5" />
             </button>
+            {/* Logo Mobile Opcional */}
+            <span className="md:hidden text-lg font-bold text-slate-900">utly</span>
           </div>
         </header>
 
         <div className="flex-1 p-4 sm:p-8 overflow-y-auto">{children}</div>
       </main>
 
-      {/* --- STICKY FOOTER AD --- */}
-      {showStickyAd && <StickyFooter />}
-    </div>
-  );
-}
-
-// Sub-componente interno para o footer
-function StickyFooter() {
-  const [visible, setVisible] = useState(true);
-  if (!visible) return null;
-
-  return (
-    <div className="fixed bottom-0 right-0 left-0 md:left-64 bg-white/95 backdrop-blur border-t border-slate-200 p-3 shadow-[0_-4px_12px_-4px_rgba(0,0,0,0.05)] z-40 animate-in slide-in-from-bottom-full duration-500">
-      <div className="max-w-5xl mx-auto relative flex items-center justify-center pr-8">
-        <AdSlot
-          label="Sticky Footer Banner (728x90)"
-          className="h-[90px] w-full max-w-3xl bg-slate-50/50"
-        />
-        <button
-          onClick={() => setVisible(false)}
-          className="absolute right-0 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
     </div>
   );
 }
