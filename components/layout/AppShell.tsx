@@ -76,7 +76,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >
-              <ImageIcon className="w-4 h-4" /> Magic Eraser
+              <ImageIcon className="w-4 h-4" /> Removedor de Fundo
             </Link>
 
             <Link
@@ -88,7 +88,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >
-              <LinkIcon className="w-4 h-4" /> Link Shortener
+              <LinkIcon className="w-4 h-4" /> Encurtador de Links
             </Link>
           </nav>
 

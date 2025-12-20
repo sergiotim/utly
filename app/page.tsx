@@ -56,7 +56,7 @@ export default function HomePage() {
             <ImageIcon className="w-6 h-6 text-purple-600" />
           </div>
           <h3 className="text-xl font-bold text-slate-900 mb-2">
-            Magic Eraser
+            Removedor de Fundo
           </h3>
           <p className="text-slate-500 text-sm leading-relaxed mb-6">
             Remova fundos de imagens instantaneamente usando IA sem perder
@@ -76,7 +76,9 @@ export default function HomePage() {
           <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
             <LinkIcon className="w-6 h-6 text-emerald-600" />
           </div>
-          <h3 className="text-xl font-bold text-slate-900 mb-2">Encurtador</h3>
+          <h3 className="text-xl font-bold text-slate-900 mb-2">
+            Encurtador de Links
+          </h3>
           <p className="text-slate-500 text-sm leading-relaxed mb-6">
             URLs curtas e amigáveis com slugs personalizados para suas
             campanhas.

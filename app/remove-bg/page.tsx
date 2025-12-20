@@ -81,7 +81,9 @@ export default function RemoveBgPage() {
   return (
     <div className="max-w-4xl mx-auto animate-in slide-in-from-bottom-4 duration-500 pb-32">
       <header className="mb-8 text-center lg:text-left">
-        <h1 className="text-2xl font-bold text-slate-900">Magic Eraser</h1>
+        <h1 className="text-2xl font-bold text-slate-900">
+          Removedor de Fundo
+        </h1>
         <p className="text-slate-500">IA avançada para recorte de imagens.</p>
       </header>
 
