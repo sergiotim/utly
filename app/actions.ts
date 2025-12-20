@@ -4,6 +4,20 @@ import { prisma } from "@/lib/prisma";
 import { nanoid } from "nanoid";
 import z from "zod";
 
+const RESERVED_SLUGS = [
+  "qrcode",
+  "remove-bg",
+  "shortener",
+  "api",
+  "admin",
+  "dashboard",
+  "login",
+  "auth",
+  "about",
+  "terms",
+  "privacy"
+];
+
 async function checkUrl(url: string) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 1500);
@@ -36,17 +50,6 @@ async function detectProtocol(domain: string) {
     hostname = new URL(tempUrlStr).hostname;
   } catch {
     return clean;
-  }
-
-  if (
-    hostname === "localhost" ||
-    hostname === "127.0.0.1" ||
-    hostname === "::1" ||
-    hostname.startsWith("192.168.") ||
-    hostname.startsWith("10.") ||
-    hostname.endsWith(".local")
-  ) {
-    return null;
   }
 
   if (/^https?:\/\//i.test(clean)) {
@@ -83,7 +86,13 @@ const urlSchema = z.string().refine((val) => {
 
 export async function createShortLink(formData: FormData) {
   const rawUrl = ((formData.get("url") as string) || "").trim();
-  const rawSlug = formData.get("slug");
+  const rawSlug = formData.get("slug") as string;
+
+  if(rawSlug && RESERVED_SLUGS.includes(rawSlug)){
+    return {
+      error: "Este nome já está sendo usado pelo sistema. Escolha outro.",
+    };
+  }
 
   if (!rawUrl) {
     return {
@@ -101,7 +110,7 @@ export async function createShortLink(formData: FormData) {
 
   const urlValidation = urlSchema.safeParse(finalUrl);
 
-  if (!urlValidation.success) {
+  if (!urlValidation.success || !finalUrl.includes(".")) {
     return { error: "O site informado não parece ser válido." };
   }
 
