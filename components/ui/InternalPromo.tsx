@@ -27,7 +27,7 @@ const PROMOS = [
   },
   {
     id: "shortener",
-    title: "Encurtador",
+    title: "Encurtador de Links",
     description: "Transforme links gigantes em URLs curtas e amigáveis.",
     icon: LinkIcon,
     href: "/shortener", // Assumindo que essa rota existirá
