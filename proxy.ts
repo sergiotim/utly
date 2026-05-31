@@ -36,6 +36,6 @@ export const config = {
      * A regex diz: "Execute em tudo, EXCETO se começar com..."
      * Adicionamos tudo na mesma lista negativa para funcionar como um "E".
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|shortener|remove-bg|qrcode|.*\\.svg|.*\\.png|.*\\.jpg).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|shortener|remove-bg|qrcode|sorteador|.*\\.svg|.*\\.png|.*\\.jpg).*)',
   ],
 }

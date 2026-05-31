@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { QrCode, Scissors, Link as LinkIcon, ArrowRight, ImageIcon } from "lucide-react";
+import { QrCode, Scissors, Link as LinkIcon, ArrowRight, ImageIcon, Dices } from "lucide-react";
 import { Button } from "./Button";
 
 // 1. Definição dos Dados:
@@ -32,6 +32,14 @@ const PROMOS = [
     icon: LinkIcon,
     href: "/shortener", // Assumindo que essa rota existirá
     color: "from-emerald-400 to-cyan-600",
+  },
+  {
+    id: "sorteador",
+    title: "Sorteador Aleatório",
+    description: "Sorteie números, nomes ou divida equipes de forma justa e animada.",
+    icon: Dices,
+    href: "/sorteador",
+    color: "from-blue-500 to-cyan-500",
   },
 ];
 
