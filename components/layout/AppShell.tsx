@@ -8,6 +8,7 @@ import {
   Image as ImageIcon,
   Link as LinkIcon,
   Menu,
+  Dices,
 } from "lucide-react";
 // Removemos o AdSlot antigo
 // import { AdSlot } from "@/components/ui/AdSlot"; 
@@ -95,6 +96,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               }`}
             >
               <LinkIcon className="w-4 h-4" /> Encurtador de Links
+            </Link>
+
+            <Link
+              href="/sorteador"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                isActive("/sorteador")
+                  ? "bg-white border border-slate-200 text-blue-600 shadow-sm"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+              }`}
+            >
+              <Dices className="w-4 h-4" /> Sorteador Aleatório
             </Link>
           </nav>
 

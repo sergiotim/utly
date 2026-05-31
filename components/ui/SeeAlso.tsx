@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import { QrCode, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import { QrCode, Image as ImageIcon, Link as LinkIcon, Dices } from 'lucide-react';
 
 export default function SeeAlso({ current }: { current: string }) {
   const tools = [
     { id: 'qrcode', name: 'QR Code Studio', icon: QrCode, color: 'text-indigo-600', href: '/qrcode' },
     { id: 'remove-bg', name: 'Magic Eraser', icon: ImageIcon, color: 'text-purple-600', href: '/remove-bg' },
     { id: 'shortener', name: 'Encurtador', icon: LinkIcon, color: 'text-emerald-600', href: '/shortener' },
+    { id: 'sorteador', name: 'Sorteador', icon: Dices, color: 'text-blue-600', href: '/sorteador' },
   ];
 
   return (
