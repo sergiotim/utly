@@ -1,12 +1,15 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { 
-  Dices, Users, Shuffle, UploadCloud, 
+import {
+  Dices, Users, Shuffle, UploadCloud,
   RotateCcw, History, Trash2, Calendar, Check
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { InputGroup } from "@/components/ui/InputGroup";
 import SeeAlso from "@/components/ui/SeeAlso";
+import SoftwareApplicationSchema from "@/components/seo/SoftwareApplicationSchema";
+import HowToGuide from "@/components/seo/HowToGuide";
+import FAQStructured from "@/components/seo/FAQStructured";
 
 type Mode = "numbers" | "names" | "teams";
 
@@ -227,8 +230,15 @@ export default function SorteadorPage() {
 
   return (
     <div className="animate-in slide-in-from-bottom-4 duration-500 pb-32">
+      <SoftwareApplicationSchema
+        name="Sorteador Online Grátis"
+        category="UtilitiesApplication"
+        description="Sorteador online gratuito, privado e anônimo. Sorteie números, nomes ou divida equipes com imparcialidade e animações, sem salvar dados em servidores."
+        requirements="Requer suporte a HTML5 e JavaScript habilitado."
+      />
+
       <div className="grid lg:grid-cols-12 gap-8">
-        
+
         {/* LADO ESQUERDO: Configurações */}
         <div className="lg:col-span-6 space-y-6">
           <header className="mb-6">
@@ -430,6 +440,59 @@ export default function SorteadorPage() {
         </div>
       </div>
       <SeeAlso current="sorteador" />
+
+      <HowToGuide
+        title="Como usar o Sorteador Online"
+        description="Realize sorteios rápidos de números, nomes ou divisão de equipes em três passos simples, diretamente no seu navegador."
+        steps={[
+          {
+            title: "1. Escolha o modo de sorteio",
+            description:
+              "Selecione entre sortear números em um intervalo, sortear nomes (manuais ou importados de TXT/CSV) ou dividir uma lista em equipes.",
+          },
+          {
+            title: "2. Configure os parâmetros",
+            description:
+              "Defina mínimo, máximo, quantidade a sortear, permitir repetição ou a importação de uma lista de participantes para nomes/equipes.",
+          },
+          {
+            title: "3. Realize o sorteio",
+            description:
+              "Clique em 'Realizar Sorteio'. Você verá os resultados imediatamente (ou com contagem regressiva animada), com metadados de data, hora e fuso horário.",
+          },
+        ]}
+      />
+
+      <FAQStructured
+        title="Perguntas Frequentes do Sorteador"
+        faqs={[
+          {
+            question: "O sorteador é gratuito?",
+            answer:
+              "Sim. O sorteador da Utly é 100% gratuito, sem cadastro, sem assinaturas e sem limites de uso.",
+          },
+          {
+            question: "As listas de nomes são salvas em algum servidor?",
+            answer:
+              "Não. Os sorteios são processados inteiramente no seu navegador (client-side). Seus dados nunca são enviados nem armazenados em nossos servidores.",
+          },
+          {
+            question: "Posso sortear equipes equilibradas?",
+            answer:
+              "Sim. Use o modo 'Equipes' para informar a lista de participantes e a quantidade de equipes. O algoritmo embaralha e distribui os membros da forma mais uniforme possível.",
+          },
+          {
+            question: "Como importar nomes de um arquivo?",
+            answer:
+              "No modo 'Nomes' ou 'Equipes', clique no botão 'Importar TXT / CSV' e selecione um arquivo .txt ou .csv. Os nomes serão adicionados à lista atual.",
+          },
+          {
+            question: "O sorteio é realmente aleatório?",
+            answer:
+              "Sim. Utilizamos funções matemáticas de embaralhamento para garantir a aleatoriedade dos resultados dentro do universo de opções informadas.",
+          },
+        ]}
+      />
     </div>
   );
 }

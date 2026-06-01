@@ -4,6 +4,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { UploadCloud, Download, RefreshCw, Loader2, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import SeeAlso from "@/components/ui/SeeAlso";
+import SoftwareApplicationSchema from "@/components/seo/SoftwareApplicationSchema";
+import HowToGuide from "@/components/seo/HowToGuide";
+import FAQStructured from "@/components/seo/FAQStructured";
 import { removeBackground } from "@imgly/background-removal";
 
 export default function RemoveBgPage() {
@@ -80,6 +83,13 @@ export default function RemoveBgPage() {
 
   return (
     <div className="max-w-4xl mx-auto animate-in slide-in-from-bottom-4 duration-500 pb-32">
+      <SoftwareApplicationSchema
+        name="Removedor de Fundo de Imagem com IA"
+        category="MultimediaApplication"
+        description="Remova o fundo de imagens automaticamente com IA, direto no seu navegador. Sem upload para servidores, sem perda de qualidade, 100% gratuito."
+        requirements="Requer suporte a HTML5, WebAssembly e WebGL."
+      />
+
       <header className="mb-8 text-center lg:text-left">
         <h1 className="text-2xl font-bold text-slate-900">
           Removedor de Fundo
@@ -208,6 +218,59 @@ export default function RemoveBgPage() {
       )}
 
       <SeeAlso current="remove-bg" />
+
+      <HowToGuide
+        title="Como remover o fundo de uma imagem"
+        description="Apague o fundo de fotos em segundos, com qualidade profissional, sem instalar nada."
+        steps={[
+          {
+            title: "1. Envie sua imagem",
+            description:
+              "Clique ou arraste um arquivo JPG, PNG ou WEBP para a área de upload. Não há limite de quantidade — processe uma imagem por vez.",
+          },
+          {
+            title: "2. Processamento por IA",
+            description:
+              "A IA é carregada localmente no seu navegador via WebAssembly. A remoção do fundo é feita diretamente no seu dispositivo.",
+          },
+          {
+            title: "3. Baixe o resultado",
+            description:
+              "Quando o processamento terminar, clique em 'Download' para salvar a imagem com fundo transparente em alta qualidade (PNG).",
+          },
+        ]}
+      />
+
+      <FAQStructured
+        title="Perguntas Frequentes do Removedor de Fundo"
+        faqs={[
+          {
+            question: "A foto é enviada para algum servidor?",
+            answer:
+              "Não. Todo o processamento é feito localmente no seu navegador, usando WebAssembly. Suas imagens nunca saem do seu computador.",
+          },
+          {
+            question: "Quais formatos de imagem são suportados?",
+            answer:
+              "Você pode enviar imagens JPG, PNG e WEBP. O resultado final é sempre um PNG com transparência no fundo.",
+          },
+          {
+            question: "Preciso instalar algum software?",
+            answer:
+              "Não. O removedor de fundo funciona 100% no navegador, em qualquer sistema operacional (Windows, macOS, Linux, Android, iOS), desde que o navegador tenha suporte a WebAssembly.",
+          },
+          {
+            question: "A ferramenta é gratuita?",
+            answer:
+              "Sim. O removedor de fundo da Utly é totalmente gratuito, sem cadastro, sem marcas d'água e sem limites diários.",
+          },
+          {
+            question: "Como funciona a IA local?",
+            answer:
+              "Utilizamos o modelo @imgly/background-removal que é executado direto no seu hardware via WASM, garantindo velocidade e privacidade total.",
+          },
+        ]}
+      />
     </div>
   );
 }

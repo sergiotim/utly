@@ -4,6 +4,9 @@ import { Download, UploadCloud, Check, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { InputGroup } from "@/components/ui/InputGroup";
 import SeeAlso from "@/components/ui/SeeAlso";
+import SoftwareApplicationSchema from "@/components/seo/SoftwareApplicationSchema";
+import HowToGuide from "@/components/seo/HowToGuide";
+import FAQStructured from "@/components/seo/FAQStructured";
 
 // lib de gerar qrcode no client
 import { QRCodeSVG } from "qrcode.react";
@@ -125,6 +128,13 @@ export default function QrCodePage() {
 
   return (
     <div className="animate-in slide-in-from-bottom-4 duration-500 pb-32">
+      <SoftwareApplicationSchema
+        name="Gerador de QR Code Grátis"
+        category="UtilitiesApplication"
+        description="Gerador de QR Code online gratuito, com personalização de cores e logo, exportação em alta resolução PNG e SVG vetorial. Sem cadastro, sem expiração."
+        requirements="Requer suporte a HTML5, Canvas e JavaScript habilitado."
+      />
+
       <div className="grid lg:grid-cols-12 gap-8">
         <div className="lg:col-span-7 space-y-6">
           <header className="mb-6">
@@ -260,6 +270,64 @@ export default function QrCodePage() {
         </div>
       </div>
       <SeeAlso current="qrcode" />
+
+      <HowToGuide
+        title="Como gerar um QR Code personalizado"
+        description="Crie QR Codes profissionais em três passos, prontos para impressão ou compartilhamento digital."
+        steps={[
+          {
+            title: "1. Insira o conteúdo",
+            description:
+              "Digite uma URL, texto, e-mail, telefone, Wi-Fi ou qualquer dado que você deseja transformar em QR Code.",
+          },
+          {
+            title: "2. Personalize cores e logo",
+            description:
+              "Escolha as cores do conteúdo e do fundo e, opcionalmente, faça upload de um logo para marcar o QR Code com a identidade visual da sua marca.",
+          },
+          {
+            title: "3. Baixe em PNG ou SVG",
+            description:
+              "Exporte o QR Code em PNG (alta resolução para materiais digitais) ou SVG (vetorial, ideal para impressão em grandes formatos sem perda de qualidade).",
+          },
+        ]}
+      />
+
+      <FAQStructured
+        title="Perguntas Frequentes do Gerador de QR Code"
+        faqs={[
+          {
+            question: "O gerador de QR Code é gratuito?",
+            answer:
+              "Sim. Você pode criar QR Codes ilimitados, sem cadastro e sem custo. Os códigos gerados são vitalícios e não expiram.",
+          },
+          {
+            question: "Posso usar o QR Code para fins comerciais?",
+            answer:
+              "Sim. Todos os QR Codes criados podem ser usados em materiais impressos, embalagens, cartões de visita, campanhas de marketing e qualquer outro fim comercial.",
+          },
+          {
+            question: "Qual a diferença entre PNG e SVG?",
+            answer:
+              "O PNG é uma imagem matricial de alta resolução, ideal para uso digital. O SVG é um arquivo vetorial, recomendado para impressão em grandes formatos pois escala sem perda de qualidade.",
+          },
+          {
+            question: "Os QR Codes expiram?",
+            answer:
+              "Não. Os QR Codes estáticos criados na Utly são vitalícios e não possuem data de expiração.",
+          },
+          {
+            question: "Posso colocar um logo no centro do QR Code?",
+            answer:
+              "Sim. Faça upload de uma imagem (PNG, JPG ou SVG) e ela será inserida no centro do QR Code, mantendo a leitura funcional graças ao algoritmo de correção de erros.",
+          },
+          {
+            question: "O QR Code funciona com cores personalizadas?",
+            answer:
+              "Sim, desde que mantenha alto contraste entre o conteúdo e o fundo. Para garantir leitura em todos os scanners, recomendamos cores escuras no conteúdo sobre fundo claro.",
+          },
+        ]}
+      />
     </div>
   );
 }

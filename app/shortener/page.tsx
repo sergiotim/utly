@@ -11,6 +11,9 @@ import {
 import { Button } from "@/components/ui/Button";
 import { InputGroup } from "@/components/ui/InputGroup";
 import SeeAlso from "@/components/ui/SeeAlso";
+import SoftwareApplicationSchema from "@/components/seo/SoftwareApplicationSchema";
+import HowToGuide from "@/components/seo/HowToGuide";
+import FAQStructured from "@/components/seo/FAQStructured";
 import { createShortLink } from "../actions";
 
 export default function ShortenerPage() {
@@ -74,6 +77,13 @@ export default function ShortenerPage() {
 
   return (
     <div className="max-w-3xl mx-auto animate-in slide-in-from-bottom-4 duration-500 pb-32">
+      <SoftwareApplicationSchema
+        name="Encurtador de Links Grátis"
+        category="UtilitiesApplication"
+        description="Encurtador de links gratuito, anônimo e seguro. Crie URLs curtas e personalizadas para suas campanhas, com proteção HTTPS e antispam."
+        requirements="Requer suporte a HTML5 e JavaScript habilitado."
+      />
+
       <header className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900">
           Encurtador de Links
@@ -201,6 +211,59 @@ export default function ShortenerPage() {
       </div>
 
       <SeeAlso current="shortener" />
+
+      <HowToGuide
+        title="Como encurtar um link"
+        description="Crie URLs curtas em segundos, prontas para compartilhar em redes sociais, e-mails e materiais impressos."
+        steps={[
+          {
+            title: "1. Cole a URL original",
+            description:
+              "Insira o link longo que você deseja encurtar no campo 'URL Original'.",
+          },
+          {
+            title: "2. Personalize o slug (opcional)",
+            description:
+              "Defina um slug curto e memorável para personalizar a URL (ex: 'promocao-natal').",
+          },
+          {
+            title: "3. Copie e compartilhe",
+            description:
+              "Clique em 'Encurtar Link'. Copie o link gerado e compartilhe em qualquer lugar.",
+          },
+        ]}
+      />
+
+      <FAQStructured
+        title="Perguntas Frequentes do Encurtador de Links"
+        faqs={[
+          {
+            question: "O encurtador de links é gratuito?",
+            answer:
+              "Sim. Você pode criar quantos links curtos quiser, sem cadastro e sem custo.",
+          },
+          {
+            question: "Os links encurtados expiram?",
+            answer:
+              "Não. Os links criados na Utly são vitalícios e não expiram, desde que a plataforma esteja no ar.",
+          },
+          {
+            question: "Posso usar um slug personalizado?",
+            answer:
+              "Sim. No campo 'Slug Personalizado', informe o final da URL que você deseja (ex: 'promo-verao').",
+          },
+          {
+            question: "Os links usam HTTPS?",
+            answer:
+              "Sim. Todos os links curtos são servidos via HTTPS, garantindo criptografia de ponta a ponta.",
+          },
+          {
+            question: "Existe proteção contra spam e phishing?",
+            answer:
+              "Sim. Implementamos motores automáticos para detectar e bloquear links nocivos, protegendo usuários e a integridade da plataforma.",
+          },
+        ]}
+      />
     </div>
   );
 }

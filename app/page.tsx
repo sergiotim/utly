@@ -6,10 +6,19 @@ import {
   Link as LinkIcon,
   ChevronRight,
 } from "lucide-react";
+import SoftwareApplicationSchema from "@/components/seo/SoftwareApplicationSchema";
+import FAQStructured from "@/components/seo/FAQStructured";
 
 export default function HomePage() {
   return (
     <div className="max-w-5xl mx-auto py-10 animate-in fade-in duration-500">
+      <SoftwareApplicationSchema
+        name="Utly - Suíte de Ferramentas Online"
+        category="UtilitiesApplication"
+        description="Utly é uma suíte de utilitários online, gratuita, anônima e focada em privacidade, com gerador de QR Code, sorteador, removedor de fundo por IA e encurtador de links."
+        requirements="Requer suporte a HTML5 e JavaScript habilitado."
+      />
+
       <div className="text-center mb-16 space-y-4">
         <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">
           Ferramentas essenciais.
@@ -44,7 +53,6 @@ export default function HomePage() {
             Acessar Ferramenta <ChevronRight className="w-4 h-4 ml-1" />
           </div>
         </Link>
-        {/* Repetir lógica para os outros cards, trocando href e ícones */}
         <Link
           href="/sorteador"
           className="group bg-white p-8 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:shadow-xl hover:shadow-indigo-100/50 transition-all cursor-pointer relative overflow-hidden"
@@ -108,6 +116,32 @@ export default function HomePage() {
           </div>
         </Link>
       </div>
+
+      <FAQStructured
+        title="Perguntas Frequentes sobre a Utly"
+        faqs={[
+          {
+            question: "O que é a Utly?",
+            answer:
+              "A Utly é uma suíte de ferramentas online gratuita, privada e focada em privacidade. Oferecemos gerador de QR Code, sorteador, removedor de fundo por IA e encurtador de links, tudo funcionando direto no seu navegador.",
+          },
+          {
+            question: "As ferramentas da Utly são realmente gratuitas?",
+            answer:
+              "Sim. Todas as ferramentas da Utly são 100% gratuitas, sem cadastro, sem assinaturas e sem limites ocultos.",
+          },
+          {
+            question: "Meus dados ficam salvos em algum servidor?",
+            answer:
+              "Não. Priorizamos o processamento local (client-side). Suas listas, imagens e documentos são processados no seu próprio navegador sempre que possível, sem upload para servidores externos.",
+          },
+          {
+            question: "Preciso instalar algum programa?",
+            answer:
+              "Não. Todas as ferramentas funcionam diretamente no navegador, em qualquer sistema operacional (Windows, macOS, Linux, Android, iOS) com suporte a HTML5.",
+          },
+        ]}
+      />
     </div>
   );
 }
